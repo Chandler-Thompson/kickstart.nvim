@@ -144,5 +144,19 @@ return {
         detached = vim.fn.has 'win32' == 0,
       },
     }
+
+    dap.adapters.godot = {
+      type = 'server',
+      host = '127.0.0.1',
+      port = 6006,
+    }
+
+    dap.configurations.gdscript = {
+      type = 'godot',
+      request = 'launch',
+      name = 'Launch scene',
+      proejct = '${workspaceFolder}',
+      launch_scene = true,
+    }
   end,
 }
