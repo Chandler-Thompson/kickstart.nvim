@@ -718,6 +718,7 @@ require('lazy').setup({
 
       -- If the plugin should silence notifications about initialization
       silent = false,
+    },
   },
   { -- Autoformat
     'stevearc/conform.nvim',
