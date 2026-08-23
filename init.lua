@@ -148,8 +148,13 @@ end
 local rtp = vim.opt.rtp
 rtp:prepend(lazypath)
 
+-- Godot talks to nvim over a socket in the project directory. Only open it when
+-- the cwd really is a Godot project: `projectfile` is a concatenated string and
+-- so always truthy, which meant every nvim session anywhere dropped a
+-- `godothost` socket in the working directory — and the next session started in
+-- that same directory died on "address already in use" before lazy.setup ran.
 local projectfile = vim.fn.getcwd() .. '/project.godot'
-if projectfile then
+if vim.fn.filereadable(projectfile) == 1 then
   vim.fn.serverstart './godothost'
 end
 
