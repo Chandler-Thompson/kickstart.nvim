@@ -586,7 +586,12 @@ require('lazy').setup({
       --  So, we create new capabilities with blink.cmp, and then broadcast that to the servers.
       local capabilities = require('blink.cmp').get_lsp_capabilities()
 
-      require('lspconfig').gdscript.setup { capabilities = capabilities }
+      -- Godot ships its own LSP, so gdscript is configured directly rather than
+      -- through mason below. Uses the built-in vim.lsp API: the `require('lspconfig')`
+      -- framework this line used to call is deprecated in nvim 0.11+ and printed a
+      -- stack traceback on every startup.
+      vim.lsp.config('gdscript', { capabilities = capabilities })
+      vim.lsp.enable 'gdscript'
 
       -- Enable the following language servers
       --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
@@ -929,6 +934,11 @@ require('lazy').setup({
   },
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
+    -- Pinned: nvim-treesitter's default branch moved to `main`, a rewrite that drops
+    -- the `nvim-treesitter.configs` module this spec configures through. Unpinned, the
+    -- plugin installs from `main`, `config` fails with "module not found", and the
+    -- editor starts with no treesitter highlighting or indentation at all.
+    branch = 'master',
     build = ':TSUpdate',
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
